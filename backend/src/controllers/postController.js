@@ -27,4 +27,19 @@ async function createPost(req, res) {
   }
 }
 
-module.exports = { createPost };
+async function getAllPosts(req, res) {
+  try {
+    const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+}
+
+module.exports = { createPost, getAllPosts };
