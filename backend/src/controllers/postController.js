@@ -42,4 +42,24 @@ async function getAllPosts(req, res) {
   }
 }
 
-module.exports = { createPost, getAllPosts };
+// controllers/postController.js
+async function getPostById(req, res) {
+  try {
+    const { id } = req.params;
+
+    const post = await prisma.post.findUnique({
+      where: { id },
+    });
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.status(200).json(post);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+}
+
+module.exports = { createPost, getAllPosts, getPostById };
